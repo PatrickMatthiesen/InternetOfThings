@@ -31,7 +31,7 @@
  *
  *******************************************************************************/
 
-#include <lmic.h>
+#include <arduino_lmic.h>
 #include <hal/hal.h>
 #include <SPI.h>
 
@@ -48,35 +48,22 @@
 //# define FILLMEIN (#dont edit this, edit the lines that use FILLMEIN)
 #endif
 
-// #define APP_EUI 0000000000000000
-// #define DEV_EUI EA1E81FFFEF8EDDB
-// #define APP_KEY CDF483F846E97643D68DB6D7FD03FA8E
-
-// static const u1_t PROGMEM APPEUI[8]  = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-// static const u1_t PROGMEM DEVEUI[8]  = { 0xEA, 0x1E, 0x81, 0xFF, 0xFE, 0xF8, 0xED, 0xDB };
-// static const u1_t PROGMEM APPKEY[16] = { 0xCD, 0xF4, 0x83, 0xF8, 0x46, 0xE9, 0x76, 0x43, 0xD6, 0x8D, 0xB6, 0xD7, 0xFD, 0x03, 0xFA, 0x8E };
-
-static const u1_t PROGMEM APPEUI[8]  = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-static const u1_t PROGMEM DEVEUI[8]  = { 0xDB, 0xED, 0xF8, 0xFE, 0xFF, 0x81, 0x1E, 0xEA };
-static const u1_t PROGMEM APPKEY[16] = { 0x8E, 0xFA, 0x03, 0xFD, 0xD7, 0xB6, 0x8D, 0xD6, 0x43, 0x76, 0xE9, 0x46, 0xF8, 0x83, 0xF4, 0xCD};
-
-// CD F4 83 F8 46 E9 76 43 D6 8D B6 D7 FD 03 FA 8E
 
 // This EUI must be in little-endian format, so least-significant-byte
 // first. When copying an EUI from ttnctl output, this means to reverse
 // the bytes. For TTN issued EUIs the last bytes should be 0xD5, 0xB3,
 // 0x70.
-// static const u1_t PROGMEM APPEUI[8]={ APP_EUI };
+static const u1_t PROGMEM APPEUI[8]  = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }; // the JoinEUI
 void os_getArtEui (u1_t* buf) { memcpy_P(buf, APPEUI, 8);}
 
 // This should also be in little endian format, see above.
-// static const u1_t PROGMEM DEVEUI[8]={ DEV_EUI };
+static const u1_t PROGMEM DEVEUI[8]  = { 0x07, 0xEC, 0x06, 0xD0, 0x7E, 0xD5, 0xB3, 0x70 }; // little endian
 void os_getDevEui (u1_t* buf) { memcpy_P(buf, DEVEUI, 8);}
 
 // This key should be in big endian format (or, since it is not really a
 // number but a block of memory, endianness does not really apply). In
 // practice, a key taken from ttnctl can be copied as-is.
-// static const u1_t PROGMEM APPKEY[16] = { APP_KEY };
+static const u1_t PROGMEM APPKEY[16] = { 0xF7, 0x6F, 0x56, 0x0F, 0xDF, 0x87, 0x6F, 0x3F, 0xC2, 0x40, 0xE4, 0x5B, 0x86, 0xF3, 0x28, 0xDF }; // big endian
 void os_getDevKey (u1_t* buf) {  memcpy_P(buf, APPKEY, 16);}
 
 static uint8_t mydata[] = "Hello, world!";
