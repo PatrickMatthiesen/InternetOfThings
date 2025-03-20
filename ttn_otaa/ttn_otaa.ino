@@ -215,9 +215,20 @@ void do_send(osjob_t* j){
     if (LMIC.opmode & OP_TXRXPEND) {
         Serial.println(F("OP_TXRXPEND, not sending"));
     } else {
+        // uint16_t co2_value = getCO2();  // Get the CO2 value (16-bit)
+        
+        // // Create a byte array to store the 16-bit value
+        // uint8_t co2[2];
+        // co2[0] = (co2_value >> 8) & 0xFF;  // High byte
+        // co2[1] = co2_value & 0xFF;  // Low byte
+
+        byte* data = getSensorData();
+        uint8_t dataLength = 11; // Set the correct data length for the payload (11 bytes)
+
         // Prepare upstream data transmission at the next possible time.
-        LMIC_setTxData2(1, mydata, sizeof(mydata)-1, 0);
+        LMIC_setTxData2(1, data, dataLength, 0);
         Serial.println(F("Packet queued"));
+        // Serial.println(co2_value);
     }
     // Next TX is scheduled after TX_COMPLETE event.
 }
@@ -240,6 +251,8 @@ void setup() {
     os_init();
     // Reset the MAC state. Session and pending data transfers will be discarded.
     LMIC_reset();
+
+    setup_air();
 
     // Start job (sending automatically starts OTAA too)
     do_send(&sendjob);
